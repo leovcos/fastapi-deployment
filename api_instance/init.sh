@@ -40,6 +40,9 @@ pip3 install -r requirements.txt
 # Define permissões de usuário para o diretório
 chown www-data:www-data -R /var/www
 
+# Adiciona permissão de execução
+chmod u+x /var/www/fastapi/start.sh
+
 # Habilita o supervisor
 supervisorctl reread
 supervisorctl update
