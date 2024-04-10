@@ -1,17 +1,31 @@
-#!/bin/bash
+#!/bin/bash -xe
 
-# git clone https://github.com/ShobiExplains/fastapi-deployment-demo.git fastapi
+# Define o diretório do script
+directory=$(dirname "$0")
 
-cd fastapi
+cd "$directory"
 
-mkdir --parents /var/www/fastapi
-mv src /var/www/fastapi
-mv requirements.txt /var/www/fastapi
+# Muda para needrestart para auto 
+# ref: https://stackoverflow.com/questions/73397110/how-to-stop-ubuntu-pop-up-daemons-using-outdated-libraries-when-using-apt-to-i
+sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 
-cd /var/www/fastapi
+# Atualiza e instala pacotes necessários
+apt-get update -y
+apt-get upgrade -y
+apt-get install nginx -y
 
-python3 -m venv env
-source env/bin/activate
-pip3 install -r requirements.txt
 
-chown  www-data:www-data -R /var/www
+# Para o nginx
+service nginx stop
+
+# Exclui o arquivo padrão do nginx.conf
+rm /etc/nginx/nginx.conf
+
+cp -R etc/* /etc/
+
+ln -s /etc/nginx/sites-available/fastapi.conf /etc/nginx/sites-enabled/
+
+systemctl enable nginx
+
+
+

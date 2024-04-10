@@ -5,10 +5,13 @@ directory=$(dirname "$0")
 
 cd "$directory"
 
-echo $pwd
+# Muda para needrestart para auto 
+# ref: https://stackoverflow.com/questions/73397110/how-to-stop-ubuntu-pop-up-daemons-using-outdated-libraries-when-using-apt-to-i
+sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 
 # Atualiza e instala pacotes necessários
 apt-get update -y
+apt-get upgrade -y
 apt-get install python3-venv python3-pip supervisor -y
 
 # # Verifica a instalação do Supervisor
