@@ -26,6 +26,7 @@ cp -R etc/* /etc/
 ln -s /etc/nginx/sites-available/fastapi.conf /etc/nginx/sites-enabled/
 
 systemctl enable nginx
+systemctl start nginx
 
 
 
